@@ -165,11 +165,17 @@ header h1 {
 .profile {
     background-color:#abffb7;
 }
-nav {
+.nav-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     background: #333;
     padding: 10px;
+}
+
+nav {
+    display: flex;
+    gap: 10px;
 }
 .tab-btn {
     background: none;
@@ -233,4 +239,71 @@ nav {
 
 .home-btn:hover {
     background: #8f8f8f;
+}
+
+.add-post-btn {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.add-post-btn:hover {
+    background: #7a7a7a;
+}
+
+/* New Post Page */
+.post{
+    background-color:#abffb7;
+}
+#new-post-form {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+/* Form Fields */
+#new-post-form label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+}
+
+#new-post-form input, #new-post-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+#new-post-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ff5722;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 15px;
+}
+
+.submit-btn:hover {
+    background: #e64a19;
 }

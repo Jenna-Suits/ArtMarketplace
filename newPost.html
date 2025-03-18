@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Art-Marketplace</title>
+</head>
+<body class="post">
+    <header>
+        <h1 id="username">Username</h1>
+        <a href="home.html" class="home-btn">Home</a>
+    </header>
+    
+    <main>
+        <section id="new-post-form">
+            <h2>Add a New Post</h2>
+            <form id="postForm">
+                
+                <label for="art-image">Upload Image:</label>
+                <input type="file" id="art-image" accept="image/*" >
+
+                
+                <label for="description">Description:</label>
+                <textarea id="description" placeholder="Enter a description of the artwork..." required></textarea>
+
+                
+                <label for="price">Price ($):</label>
+                <input type="number" id="price" placeholder="Enter price" required>
+
+                <button type="submit" class="submit-btn">Post Artwork</button>
+            </form>
+        </section>
+
+    </main>
+    <script>
+        document.getElementById("new-post-form").addEventListener("submit", function(event) {
+            event.preventDefault(); 
+            window.location.href = "profile.html"; //after clicking login button brings to profile.html
+            });
+        </script>
+</body>
+</html>
