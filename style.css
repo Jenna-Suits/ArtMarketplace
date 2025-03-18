@@ -74,7 +74,6 @@
     background: #00520b;
 }
 
-/* Link Styling */
 .link-container {
     margin-top: 15px;
 }
@@ -84,4 +83,76 @@
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
+}
+
+/* Home Page */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #222;
+    color: white;
+    padding: 15px 20px;
+    position: relative;
+}
+
+header h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+}
+
+.profile-btn {
+    background: #abffb7;
+    color: rgb(0, 0, 0);
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s;
+    margin-left: auto;
+}
+
+.profile-btn:hover {
+    background: #00520b;
+}
+
+.art-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 40px;
+    justify-content: center;
+}
+
+.art-box {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.art-box img {
+    width: 100%;
+    border-radius: 8px;
+    max-height: 250px;
+    object-fit: cover;
+}
+
+.like-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 16px;
+    background: #eb9898;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 1s;
+}
+
+.like-button:hover {
+    background: #e95050;
 }
