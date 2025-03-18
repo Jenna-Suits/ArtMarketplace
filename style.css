@@ -220,3 +220,17 @@ nav {
     max-height: 250px;
     object-fit: cover;
 }
+.home-btn {
+    background: #fcfcfc;
+    color: rgb(0, 0, 0);
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s;
+    margin-left: auto;
+}
+
+.home-btn:hover {
+    background: #8f8f8f;
+}
