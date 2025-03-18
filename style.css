@@ -1,4 +1,4 @@
-/* Login Page */
+/* Login and Create Account Page */
 .login-page, .create-account-page {
     display: flex;
     justify-content: center;
@@ -28,4 +28,60 @@
     color: white;
     font-size: 16px;
     outline: none;
+}
+
+.login-container input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+
+.login-container label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+
+.name-fields {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.name-fields .input-group {
+    width: 48%;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background: #00800b;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 15px;
+}
+
+.login-button:hover {
+    background: #00520b;
+}
+
+/* Link Styling */
+.link-container {
+    margin-top: 15px;
+}
+
+.link-container a {
+    color: #ff5722;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
 }
