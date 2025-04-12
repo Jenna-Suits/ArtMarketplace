@@ -82,22 +82,16 @@
     
           try {
             
-            const uniqueFileName = `${Date.now()}_${file.name}`;
-            const storageRef = ref(storage, `posts/${userDocID}/${uniqueFileName}`);
-    
-            
-            await uploadBytes(storageRef, file);
-    
-            
-            const downloadURL = await getDownloadURL(storageRef);
-    
-            
+            // Convert the image to a Base64 encoded string
+            const base64Image = await fileToBase64(file);
+
+            // Create a new document in Firestore under the logged-in user's "myPosts" subcollection
             const myPostsRef = collection(db, "users", userDocID, "myPosts");
             await addDoc(myPostsRef, {
-              image: downloadURL,
-              description: description,
-              price: parseFloat(price),
-              timestamp: new Date()
+            image: base64Image,      // The image stored as a Base64 string
+            description: description,
+            price: parseFloat(price),
+            timestamp: new Date()
             });
     
             
