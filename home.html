@@ -113,19 +113,21 @@
     
         // load all posts from any user
         async function loadAllPosts() {
-          try {
+        try {
             const postsQuerySnapshot = await getDocs(collectionGroup(db, "myPosts"));
+            console.log("Total posts fetched:", postsQuerySnapshot.size);
             postsContainer.innerHTML = "";
             postsQuerySnapshot.forEach(docSnap => {
-              const data = docSnap.data();
-              
-              data.id = docSnap.id;
-              const artBox = createArtBox(data);
-              postsContainer.appendChild(artBox);
+            const data = docSnap.data();
+            // Attach the document id so that like functionality can use it.
+            data.id = docSnap.id;
+            console.log("Fetched post:", data);
+            const artBox = createArtBox(data);
+            postsContainer.appendChild(artBox);
             });
-          } catch (error) {
+        } catch (error) {
             console.error("Error loading posts:", error);
-          }
+        }
         }
     
         // Load all posts
