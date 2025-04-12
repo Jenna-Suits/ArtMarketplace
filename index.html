@@ -26,7 +26,6 @@
             </div>
         </div>
         <script type="module">
-            // Import Firebase modules from CDN (v9.22.1 used as an example)
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
             import { 
@@ -37,7 +36,6 @@
                 getDocs 
             } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
     
-            // Firebase configuration object
             const firebaseConfig = {
                 apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
                 authDomain: "artmarketplace-b9d82.firebaseapp.com",
@@ -48,7 +46,6 @@
                 measurementId: "G-34J7ZWYFZR"
             };
     
-            // Initialize Firebase services
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
             const db = getFirestore(app);
@@ -63,8 +60,6 @@
     
                 const usersRef = collection(db, "users");
     
-                // Create a query that filters the users collection by username and password,
-                // and only retrieves the "username" and "password" fields.
                 const q = query(
                     usersRef,
                     where("username", "==", usernameInput),
@@ -75,7 +70,6 @@
                     const querySnapshot = await getDocs(q);
     
                     if (!querySnapshot.empty) {
-                        // Login successful – redirect to home.html.
                         window.location.href = "home.html";
                     } else {
                         alert("Invalid username or password. Please try again.");
