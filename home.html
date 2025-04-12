@@ -84,7 +84,7 @@
           likeBtn.addEventListener("click", async (e) => {
             e.preventDefault();
             try {
-              .
+              
               const likedPostDocRef = doc(db, "users", userDocID, "likedPosts", data.id);
               const likedPostSnap = await getDoc(likedPostDocRef);
               if (likedPostSnap.exists()) {
