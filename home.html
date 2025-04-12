@@ -12,24 +12,95 @@
         <a href="profile.html" class="profile-btn">Profile</a>
     </header>
 
-    <main class="art-gallery">
-        <div class="art-box">
-            <img src="art1.jpg" alt="Artwork 1">
-            <button class="like-button">❤️ Like</button>
-        </div>
-        <div class="art-box">
-            <img src="art2.jpg" alt="Artwork 2">
-            <button class="like-button">❤️ Like</button>
-        </div>
-        <div class="art-box">
-            <img src="art3.jpg" alt="Artwork 3">
-            <button class="like-button">❤️ Like</button>
-        </div>
-        <div class="art-box">
-            <img src="art4.jpg" alt="Artwork 4">
-            <button class="like-button">❤️ Like</button>
-        </div>
+    <main class="art-gallery" id="postsContainer">
     </main>
-
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
+        import { getFirestore, collectionGroup, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
+          authDomain: "artmarketplace-b9d82.firebaseapp.com",
+          projectId: "artmarketplace-b9d82",
+          storageBucket: "artmarketplace-b9d82.firebasestorage.app",
+          messagingSenderId: "45297249976",
+          appId: "1:45297249976:web:e588fc6e53a341a2c14e4d",
+          measurementId: "G-34J7ZWYFZR"
+        };
+    
+        
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+    
+        
+        async function loadAllPosts() {
+          try {
+            
+            const postsQuerySnapshot = await getDocs(collectionGroup(db, "myPosts"));
+            const container = document.getElementById("postsContainer");
+            container.innerHTML = "";
+            postsQuerySnapshot.forEach(doc => {
+              const data = doc.data();
+              
+              const artBox = document.createElement("div");
+              artBox.className = "art-box";
+    
+              
+              const img = document.createElement("img");
+              img.src = data.image;
+              img.alt = data.description || "Artwork";
+              artBox.appendChild(img);
+    
+              
+              if (data.description) {
+                const descPara = document.createElement("p");
+                descPara.textContent = data.description;
+                artBox.appendChild(descPara);
+              }
+    
+              
+              if (data.price) {
+                const pricePara = document.createElement("p");
+                pricePara.textContent = `$${data.price}`;
+                artBox.appendChild(pricePara);
+              }
+    
+              
+              const likeBtn = document.createElement("button");
+              likeBtn.className = "like-button";
+              likeBtn.textContent = "❤️ Like";
+              likeBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+                try {
+                const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
+                // Check data to store; you can add additional fields if needed
+                await addDoc(likedPostsRef, {
+                    image: postData.image,
+                    description: postData.description || "",
+                    price: postData.price || "",
+                    timestamp: new Date()
+                });
+                alert("Post liked!");
+                } catch (error) {
+                console.error("Error liking post:", error);
+                alert("Error liking post. Please try again later.");
+                }
+            });
+              artBox.appendChild(likeBtn);
+    
+              
+              container.appendChild(artBox);
+            });
+          } catch (error) {
+            console.error("Error loading posts:", error);
+          }
+        }
+    
+        // Load all posts .
+        loadAllPosts();
+      </script>
 </body>
 </html>    
