@@ -39,15 +39,35 @@
     </div>
 </div>
 <script type="module">
-    import { db } from './firebaseConfig.js';
-    import { collection, addDoc } from 'firebase/firestore';
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
 
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
+        authDomain: "artmarketplace-b9d82.firebaseapp.com",
+        projectId: "artmarketplace-b9d82",
+        storageBucket: "artmarketplace-b9d82.firebasestorage.app",
+        messagingSenderId: "45297249976",
+        appId: "1:45297249976:web:e588fc6e53a341a2c14e4d",
+        measurementId: "G-34J7ZWYFZR"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);;
+
+    // Access the form element by its ID "loginForm"
     const createAccountForm = document.getElementById("loginForm");
 
     createAccountForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        console.log("Form submitted");
 
+        // Retrieve and trim the input values
         const firstNameValue = document.getElementById("first-name").value.trim();
         const lastNameValue = document.getElementById("last-name").value.trim();
         const phoneValue = document.getElementById("phone").value.trim();
@@ -55,15 +75,16 @@
         const passwordValue = document.getElementById("password").value.trim();
 
         try {
+            // Add a new document in the "users" collection in Firestore
             await addDoc(collection(db, "users"), {
-                
                 "first-name": firstNameValue,
                 "last-name": lastNameValue,
                 "username": usernameValue,
-                "password": passwordValue,  
+                "password": passwordValue,
                 "phone": phoneValue,
             });
 
+            // Redirect to the login page after success
             window.location.href = "index.html";
         } catch (error) {
             console.error("Error creating new user:", error);
