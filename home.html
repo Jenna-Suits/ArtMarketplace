@@ -17,7 +17,13 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
-        import { getFirestore, collectionGroup, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+        import { 
+          getFirestore, 
+          collectionGroup, 
+          collection as fbCollection, 
+          getDocs, 
+          addDoc 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
     
         
         const firebaseConfig = {
@@ -37,82 +43,81 @@
     
         
         const userDocID = localStorage.getItem("userDocID");
-    if (!userDocID) {
-      window.location.href = "index.html";
-    }
-
-    const postsContainer = document.getElementById("postsContainer");
-
-    
-    function createArtBox(data) {
-      const artBox = document.createElement("div");
-      artBox.className = "art-box";
-
-      
-      const img = document.createElement("img");
-      img.src = data.image;
-      img.alt = data.description || "Artwork";
-      artBox.appendChild(img);
-
-      
-      const detailsContainer = document.createElement("div");
-      detailsContainer.className = "post-details";
-      if (data.description) {
-        const descPara = document.createElement("p");
-        descPara.textContent = data.description;
-        detailsContainer.appendChild(descPara);
-      }
-      if (data.price) {
-        const pricePara = document.createElement("p");
-        pricePara.textContent = `$${data.price}`;
-        detailsContainer.appendChild(pricePara);
-      }
-      artBox.appendChild(detailsContainer);
-
-      // Create a like button 
-      const likeBtn = document.createElement("button");
-      likeBtn.className = "like-button";
-      likeBtn.textContent = "❤️ Like";
-      likeBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        try {
-          
-          const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
-          
-          await addDoc(likedPostsRef, {
-            image: data.image,
-            description: data.description || "",
-            price: data.price || "",
-            timestamp: new Date()
-          });
-          alert("Post liked!");
-        } catch (error) {
-          console.error("Error liking post:", error);
-          alert("Error liking post. Please try again later.");
+        if (!userDocID) {
+          window.location.href = "index.html";
         }
-      });
-      artBox.appendChild(likeBtn);
-
-      return artBox;
-    }
-
-    // load all posts from all users 
-    async function loadAllPosts() {
-      try {
-        const postsQuerySnapshot = await getDocs(collectionGroup(db, "myPosts"));
-        postsContainer.innerHTML = "";
-        postsQuerySnapshot.forEach(doc => {
-          const data = doc.data();
-          const artBox = createArtBox(data);
-          postsContainer.appendChild(artBox);
-        });
-      } catch (error) {
-        console.error("Error loading posts:", error);
-      }
-    }
-
-    // Load all posts 
-    loadAllPosts();
-  </script>
+    
+        const postsContainer = document.getElementById("postsContainer");
+    
+        
+        function createArtBox(data) {
+          const artBox = document.createElement("div");
+          artBox.className = "art-box";
+    
+          
+          const img = document.createElement("img");
+          img.src = data.image;
+          img.alt = data.description || "Artwork";
+          artBox.appendChild(img);
+    
+          
+          const detailsContainer = document.createElement("div");
+          detailsContainer.className = "post-details";
+          if (data.description) {
+            const descPara = document.createElement("p");
+            descPara.textContent = data.description;
+            detailsContainer.appendChild(descPara);
+          }
+          if (data.price) {
+            const pricePara = document.createElement("p");
+            pricePara.textContent = `$${data.price}`;
+            detailsContainer.appendChild(pricePara);
+          }
+          artBox.appendChild(detailsContainer);
+    
+          
+          const likeBtn = document.createElement("button");
+          likeBtn.className = "like-button";
+          likeBtn.textContent = "❤️ Like";
+          likeBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            try {
+              
+              const likedPostsRef = fbCollection(db, "users", userDocID, "likedPosts");
+              await addDoc(likedPostsRef, {
+                image: data.image,
+                description: data.description || "",
+                price: data.price || "",
+                timestamp: new Date()
+              });
+              alert("Post liked!");
+            } catch (error) {
+              console.error("Error liking post:", error);
+              alert("Error liking post. Please try again later.");
+            }
+          });
+          artBox.appendChild(likeBtn);
+    
+          return artBox;
+        }
+    
+        //load all posts from any user
+        async function loadAllPosts() {
+          try {
+            const postsQuerySnapshot = await getDocs(collectionGroup(db, "myPosts"));
+            postsContainer.innerHTML = "";
+            postsQuerySnapshot.forEach(doc => {
+              const data = doc.data();
+              const artBox = createArtBox(data);
+              postsContainer.appendChild(artBox);
+            });
+          } catch (error) {
+            console.error("Error loading posts:", error);
+          }
+        }
+    
+        // Load all posts 
+        loadAllPosts();
+      </script>
 </body>
 </html>    
