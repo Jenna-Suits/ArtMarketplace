@@ -46,6 +46,7 @@
 
     createAccountForm.addEventListener("submit", async (event) => {
         event.preventDefault();
+        console.log("Form submitted");
 
         const firstNameValue = document.getElementById("first-name").value.trim();
         const lastNameValue = document.getElementById("last-name").value.trim();
