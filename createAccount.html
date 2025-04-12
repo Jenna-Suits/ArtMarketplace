@@ -39,7 +39,6 @@
     </div>
 </div>
 <script type="module">
-    // Import your Firebase configuration and Firestore functions
     import { db } from './firebaseConfig.js';
     import { collection, addDoc } from 'firebase/firestore';
 
@@ -48,7 +47,6 @@
     createAccountForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        // Retrieve values from the form inputs
         const firstNameValue = document.getElementById("first-name").value.trim();
         const lastNameValue = document.getElementById("last-name").value.trim();
         const phoneValue = document.getElementById("phone").value.trim();
@@ -56,19 +54,15 @@
         const passwordValue = document.getElementById("password").value.trim();
 
         try {
-            // Add a new document to the "users" collection
             await addDoc(collection(db, "users"), {
-                // Match Firestore field names with your screenshot
+                
                 "first-name": firstNameValue,
                 "last-name": lastNameValue,
                 username: usernameValue,
-                password: passwordValue,  // Do NOT store plain text passwords in production
+                password: passwordValue,  
                 phone: phoneValue,
-                likedPosts: [],  // Initialize as empty arrays
-                myPosts: []
             });
 
-            // Redirect to login after a successful account creation
             window.location.href = "index.html";
         } catch (error) {
             console.error("Error creating new user:", error);
