@@ -77,29 +77,37 @@
     
           
           const likeBtn = document.createElement("button");
-          likeBtn.className = "like-button";
-          likeBtn.textContent = "❤️ Like";
-          likeBtn.addEventListener("click", async (e) => {
-            e.preventDefault();
-            try {
-              
-              const likedPostsRef = fbCollection(db, "users", userDocID, "likedPosts");
-              await addDoc(likedPostsRef, {
-                image: data.image,
-                description: data.description || "",
-                price: data.price || "",
-                timestamp: new Date()
-              });
-              alert("Post liked!");
-            } catch (error) {
-              console.error("Error liking post:", error);
-              alert("Error liking post. Please try again later.");
-            }
-          });
-          artBox.appendChild(likeBtn);
-    
-          return artBox;
+      likeBtn.className = "like-button";
+      likeBtn.textContent = "❤️ Like";
+      likeBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+         
+          const likedPostDocRef = doc(db, "users", userDocID, "likedPosts", postData.id);
+          const likedPostSnap = await getDoc(likedPostDocRef);
+          if (likedPostSnap.exists()) {
+            
+            await deleteDoc(likedPostDocRef);
+            alert("Post unliked!");
+          } else {
+            
+            await setDoc(likedPostDocRef, {
+              image: postData.image,
+              description: postData.description || "",
+              price: postData.price || "",
+              timestamp: new Date()
+            });
+            alert("Post liked!");
+          }
+        } catch (error) {
+          console.error("Error toggling like:", error);
+          alert("Error toggling like. Please try again later.");
         }
+      });
+      artBox.appendChild(likeBtn);
+
+      return artBox;
+    }
     
         //load all posts from any user
         async function loadAllPosts() {
