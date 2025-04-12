@@ -36,71 +36,83 @@
         const db = getFirestore(app);
     
         
-        async function loadAllPosts() {
-          try {
-            
-            const postsQuerySnapshot = await getDocs(collectionGroup(db, "myPosts"));
-            const container = document.getElementById("postsContainer");
-            container.innerHTML = "";
-            postsQuerySnapshot.forEach(doc => {
-              const data = doc.data();
-              
-              const artBox = document.createElement("div");
-              artBox.className = "art-box";
+        const userDocID = localStorage.getItem("userDocID");
+    if (!userDocID) {
+      window.location.href = "index.html";
+    }
+
+    const postsContainer = document.getElementById("postsContainer");
+
     
-              
-              const img = document.createElement("img");
-              img.src = data.image;
-              img.alt = data.description || "Artwork";
-              artBox.appendChild(img);
-    
-              
-              if (data.description) {
-                const descPara = document.createElement("p");
-                descPara.textContent = data.description;
-                artBox.appendChild(descPara);
-              }
-    
-              
-              if (data.price) {
-                const pricePara = document.createElement("p");
-                pricePara.textContent = `$${data.price}`;
-                artBox.appendChild(pricePara);
-              }
-    
-              
-              const likeBtn = document.createElement("button");
-              likeBtn.className = "like-button";
-              likeBtn.textContent = "❤️ Like";
-              likeBtn.addEventListener("click", async (e) => {
-                e.preventDefault();
-                try {
-                const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
-                // Check data to store; you can add additional fields if needed
-                await addDoc(likedPostsRef, {
-                    image: postData.image,
-                    description: postData.description || "",
-                    price: postData.price || "",
-                    timestamp: new Date()
-                });
-                alert("Post liked!");
-                } catch (error) {
-                console.error("Error liking post:", error);
-                alert("Error liking post. Please try again later.");
-                }
-            });
-              artBox.appendChild(likeBtn);
-    
-              
-              container.appendChild(artBox);
-            });
-          } catch (error) {
-            console.error("Error loading posts:", error);
-          }
+    function createArtBox(data) {
+      const artBox = document.createElement("div");
+      artBox.className = "art-box";
+
+      
+      const img = document.createElement("img");
+      img.src = data.image;
+      img.alt = data.description || "Artwork";
+      artBox.appendChild(img);
+
+      
+      const detailsContainer = document.createElement("div");
+      detailsContainer.className = "post-details";
+      if (data.description) {
+        const descPara = document.createElement("p");
+        descPara.textContent = data.description;
+        detailsContainer.appendChild(descPara);
+      }
+      if (data.price) {
+        const pricePara = document.createElement("p");
+        pricePara.textContent = `$${data.price}`;
+        detailsContainer.appendChild(pricePara);
+      }
+      artBox.appendChild(detailsContainer);
+
+      // Create a like button 
+      const likeBtn = document.createElement("button");
+      likeBtn.className = "like-button";
+      likeBtn.textContent = "❤️ Like";
+      likeBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          
+          const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
+          
+          await addDoc(likedPostsRef, {
+            image: data.image,
+            description: data.description || "",
+            price: data.price || "",
+            timestamp: new Date()
+          });
+          alert("Post liked!");
+        } catch (error) {
+          console.error("Error liking post:", error);
+          alert("Error liking post. Please try again later.");
         }
-    
-        // Load all posts .
-        loadAllPosts();
-      </script>
+      });
+      artBox.appendChild(likeBtn);
+
+      return artBox;
+    }
+
+    // load all posts from all users 
+    async function loadAllPosts() {
+      try {
+        const postsQuerySnapshot = await getDocs(collectionGroup(db, "myPosts"));
+        postsContainer.innerHTML = "";
+        postsQuerySnapshot.forEach(doc => {
+          const data = doc.data();
+          const artBox = createArtBox(data);
+          postsContainer.appendChild(artBox);
+        });
+      } catch (error) {
+        console.error("Error loading posts:", error);
+      }
+    }
+
+    // Load all posts 
+    loadAllPosts();
+  </script>
 </body>
 </html>    
