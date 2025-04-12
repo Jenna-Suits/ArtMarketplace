@@ -33,11 +33,80 @@
         </section>
 
     </main>
-    <script>
-        document.getElementById("new-post-form").addEventListener("submit", function(event) {
-            event.preventDefault(); 
-            window.location.href = "profile.html"; //after clicking login button brings to profile.html
+    <script type="module">
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
+    
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
+          authDomain: "artmarketplace-b9d82.firebaseapp.com",
+          projectId: "artmarketplace-b9d82",
+          storageBucket: "artmarketplace-b9d82.firebasestorage.app",
+          messagingSenderId: "45297249976",
+          appId: "1:45297249976:web:e588fc6e53a341a2c14e4d",
+          measurementId: "G-34J7ZWYFZR"
+        };
+    
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const analytics = getAnalytics(app);
+    
+        // Get user's document ID (stored during login)
+        const userDocID = localStorage.getItem("userDocID");
+        if (!userDocID) {
+          alert("User not logged in.");
+          window.location.href = "index.html";
+        }
+    
+        const postForm = document.getElementById("postForm");
+    
+        postForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+    
+          
+          const fileInput = document.getElementById("art-image");
+          const file = fileInput.files[0];
+          const description = document.getElementById("description").value.trim();
+          const price = document.getElementById("price").value;
+    
+          if (!file) {
+            alert("Please select an image to upload.");
+            return;
+          }
+    
+          try {
+            
+            const uniqueFileName = `${Date.now()}_${file.name}`;
+            const storageRef = ref(storage, `posts/${userDocID}/${uniqueFileName}`);
+    
+            
+            await uploadBytes(storageRef, file);
+    
+            
+            const downloadURL = await getDownloadURL(storageRef);
+    
+            
+            const myPostsRef = collection(db, "users", userDocID, "myPosts");
+            await addDoc(myPostsRef, {
+              image: downloadURL,
+              description: description,
+              price: parseFloat(price),
+              timestamp: new Date()
             });
-        </script>
+    
+            
+            window.location.href = "profile.html";
+          } catch (error) {
+            console.error("Error adding new post:", error);
+            alert("There was an error adding your post. Please try again later.");
+          }
+        });
+      </script>
 </body>
 </html>
