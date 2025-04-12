@@ -38,100 +38,122 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
-        import { 
-          getFirestore, 
-          collection, 
-          query, 
-          where,  
-          getDocs 
+        import {
+          getFirestore,
+          collection,
+          getDocs
         } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-    
+      
         
         const firebaseConfig = {
-            apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
-            authDomain: "artmarketplace-b9d82.firebaseapp.com",
-            projectId: "artmarketplace-b9d82",
-            storageBucket: "artmarketplace-b9d82.firebasestorage.app",
-            messagingSenderId: "45297249976",
-            appId: "1:45297249976:web:e588fc6e53a341a2c14e4d",
-            measurementId: "G-34J7ZWYFZR"
+          apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
+          authDomain: "artmarketplace-b9d82.firebaseapp.com",
+          projectId: "artmarketplace-b9d82",
+          storageBucket: "artmarketplace-b9d82.firebasestorage.app",
+          messagingSenderId: "45297249976",
+          appId: "1:45297249976:web:e588fc6e53a341a2c14e4d",
+          measurementId: "G-34J7ZWYFZR"
         };
-    
+      
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
-    
-        const currentUsername = localStorage.getItem("username") || "John Doe";
-    const userDocID = localStorage.getItem("userDocID");
-    
-    
-    if (!userDocID) {
-      window.location.href = "index.html";
-    }
-
-    
-    document.getElementById("username").textContent = currentUsername;
-
-    
-    function loadPosts(sectionId, posts) {
-      const container = document.querySelector(`#${sectionId} .post-grid`);
-      container.innerHTML = "";
-      posts.forEach(post => {
-        const postBox = document.createElement("div");
-        postBox.className = "post-box";
-        const img = document.createElement("img");
+      
         
-        img.src = post.image;                
-        img.alt = post.alt || "Art Image";    
-        postBox.appendChild(img);
-        container.appendChild(postBox);
-      });
-    }
-
-    
-    async function fetchLikedPosts() {
-      try {
-        const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
-        const querySnapshot = await getDocs(likedPostsRef);
-        const likedPosts = [];
-        querySnapshot.forEach(doc => {
-          likedPosts.push(doc.data());
+        const currentUsername = localStorage.getItem("username") || "John Doe";
+        const userDocID = localStorage.getItem("userDocID");
+        if (!userDocID) {
+          window.location.href = "index.html";
+        }
+        document.getElementById("username").textContent = currentUsername;
+      
+        
+        function loadPosts(sectionId, posts) {
+          const container = document.querySelector(`#${sectionId} .post-grid`);
+          container.innerHTML = "";
+          posts.forEach(post => {
+            const postBox = document.createElement("div");
+            postBox.className = "post-box";
+      
+            
+            const img = document.createElement("img");
+            img.src = post.image;
+            img.alt = post.alt || "Art Image";
+            postBox.appendChild(img);
+      
+            
+            
+            if (post.description || post.price) {
+              const detailsContainer = document.createElement("div");
+              detailsContainer.className = "post-details";
+      
+              if (post.description) {
+                const descriptionPara = document.createElement("p");
+                descriptionPara.textContent = post.description;
+                detailsContainer.appendChild(descriptionPara);
+              }
+      
+              if (post.price) {
+                const pricePara = document.createElement("p");
+                pricePara.textContent = `$${post.price}`;
+                pricePara.className = "post-price";
+                detailsContainer.appendChild(pricePara);
+              }
+              postBox.appendChild(detailsContainer);
+            }
+            container.appendChild(postBox);
+          });
+        }
+      
+        //liked posts 
+        async function fetchLikedPosts() {
+          try {
+            const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
+            const querySnapshot = await getDocs(likedPostsRef);
+            const likedPosts = [];
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              console.log("Liked post data:", data);
+              likedPosts.push(data);
+            });
+            loadPosts("liked-posts", likedPosts);
+          } catch (error) {
+            console.error("Error fetching liked posts:", error);
+          }
+        }
+      
+        //my posts
+        async function fetchMyPosts() {
+          try {
+            const myPostsRef = collection(db, "users", userDocID, "myPosts");
+            const querySnapshot = await getDocs(myPostsRef);
+            const myPosts = [];
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              console.log("My post data:", data);
+              myPosts.push(data);
+            });
+            loadPosts("my-posts", myPosts);
+          } catch (error) {
+            console.error("Error fetching my posts:", error);
+          }
+        }
+      
+        
+        fetchLikedPosts();
+        fetchMyPosts();
+      
+        
+        const tabs = document.querySelectorAll(".tab-btn");
+        const contents = document.querySelectorAll(".tab-content");
+        tabs.forEach(tab => {
+          tab.addEventListener("click", function() {
+            tabs.forEach(t => t.classList.remove("active"));
+            contents.forEach(c => c.classList.remove("active"));
+            tab.classList.add("active");
+            document.getElementById(tab.dataset.tab).classList.add("active");
+          });
         });
-        loadPosts("liked-posts", likedPosts);
-      } catch (error) {
-        console.error("Error fetching liked posts:", error);
-      }
-    }
-
-    async function fetchMyPosts() {
-      try {
-        const myPostsRef = collection(db, "users", userDocID, "myPosts");
-        const querySnapshot = await getDocs(myPostsRef);
-        const myPosts = [];
-        querySnapshot.forEach(doc => {
-          myPosts.push(doc.data());
-        });
-        loadPosts("my-posts", myPosts);
-      } catch (error) {
-        console.error("Error fetching my posts:", error);
-      }
-    }
-
-    fetchLikedPosts();
-    fetchMyPosts();
-
-    //able to change between my posts and liked posts
-    const tabs = document.querySelectorAll(".tab-btn");
-    const contents = document.querySelectorAll(".tab-content");
-
-    tabs.forEach(tab => {
-      tab.addEventListener("click", function() {
-        tabs.forEach(t => t.classList.remove("active"));
-        contents.forEach(c => c.classList.remove("active"));
-        tab.classList.add("active");
-        document.getElementById(tab.dataset.tab).classList.add("active");
-      });
-    });
-  </script>
+      </script>
 </body>
 </html>
