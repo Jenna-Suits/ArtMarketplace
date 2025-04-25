@@ -92,10 +92,9 @@
         }
 
         try {
-            // Convert the image file to a Base64 encoded string
+            // Convert the image file to a Base64 for firebase to keep in database
             const base64Image = await fileToBase64(file);
 
-            // Add a new document to the logged-in user's "myPosts" subcollection in Firestore
             const myPostsRef = collection(db, "users", userDocID, "myPosts");
             await addDoc(myPostsRef, {
             image: base64Image,    // Base64 string of the image
@@ -104,7 +103,7 @@
             timestamp: new Date()
             });
 
-            // Redirect to the profile page 
+            // Brings back to login page
             window.location.href = "profile.html";
         } catch (error) {
             console.error("Error adding new post:", error);

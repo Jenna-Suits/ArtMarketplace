@@ -70,7 +70,7 @@
                     const querySnapshot = await getDocs(q);
     
                     if (!querySnapshot.empty) {
-                        //adds local storage to keep track of user loged in
+                        //adds local storage for who is logged in 
                         querySnapshot.forEach((doc) => {
                         localStorage.setItem("userDocID", doc.id);
                         localStorage.setItem("username", doc.data().username);

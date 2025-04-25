@@ -78,10 +78,10 @@
           artBox.appendChild(detailsContainer);
     
           
-          const likeBtn = document.createElement("button");
-          likeBtn.className = "like-button";
-          likeBtn.textContent = "❤️ Like";
-          likeBtn.addEventListener("click", async (e) => {
+          const like = document.createElement("button");
+          like.className = "like-button";
+          like.textContent = "❤️ Like";
+          like.addEventListener("click", async (e) => {
             e.preventDefault();
             try {
               
@@ -106,7 +106,7 @@
               alert("Error toggling like. Please try again later.");
             }
           });
-          artBox.appendChild(likeBtn);
+          artBox.appendChild(like);
     
           return artBox;
         }
@@ -119,7 +119,7 @@
             postsContainer.innerHTML = "";
             postsQuerySnapshot.forEach(docSnap => {
             const data = docSnap.data();
-            // Attach the document id so that like functionality can use it.
+            // Attach the document id so that like button works
             data.id = docSnap.id;
             console.log("Fetched post:", data);
             const artBox = createArtBox(data);
