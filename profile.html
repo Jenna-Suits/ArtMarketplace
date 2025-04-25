@@ -106,7 +106,7 @@
         }
       
         //liked posts 
-        async function fetchLikedPosts() {
+        async function getLikedPosts() {
           try {
             const likedPostsRef = collection(db, "users", userDocID, "likedPosts");
             const querySnapshot = await getDocs(likedPostsRef);
@@ -118,12 +118,12 @@
             });
             loadPosts("liked-posts", likedPosts);
           } catch (error) {
-            console.error("Error fetching liked posts:", error);
+            console.error("Error getting liked posts:", error);
           }
         }
       
         //my posts
-        async function fetchMyPosts() {
+        async function getMyPosts() {
           try {
             const myPostsRef = collection(db, "users", userDocID, "myPosts");
             const querySnapshot = await getDocs(myPostsRef);
@@ -135,13 +135,13 @@
             });
             loadPosts("my-posts", myPosts);
           } catch (error) {
-            console.error("Error fetching my posts:", error);
+            console.error("Error getting my posts:", error);
           }
         }
       
         
-        fetchLikedPosts();
-        fetchMyPosts();
+        getLikedPosts();
+        getMyPosts();
       
         
         const tabs = document.querySelectorAll(".tab-btn");
