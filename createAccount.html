@@ -39,12 +39,12 @@
     </div>
 </div>
 <script type="module">
-    // Import Firebase modules from the CDN (using version 9.22.1 as an example)
+    // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-    // Your Firebase configuration object
+    // Your Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyCIn0JGnpqCVrKswO-7NOG6cS-S0JwjLMw",
         authDomain: "artmarketplace-b9d82.firebaseapp.com",
@@ -54,13 +54,10 @@
         appId: "1:45297249976:web:e588fc6e53a341a2c14e4d",
         measurementId: "G-34J7ZWYFZR"
     };
-
-    // Initialize Firebase services
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
 
-    // Reference to the form element
     const createAccountForm = document.getElementById("loginForm");
 
     createAccountForm.addEventListener("submit", async (event) => {
