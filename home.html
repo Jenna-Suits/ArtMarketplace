@@ -13,6 +13,9 @@
     </header>
 
     <main class="art-gallery" id="postsContainer">
+      <footer>
+        <a href="index.html" class="logout-btn">Logout</a>
+      </footer>
     </main>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -74,6 +77,12 @@
             const pricePara = document.createElement("p");
             pricePara.textContent = `$${data.price}`;
             detailsContainer.appendChild(pricePara);
+          }
+          if (data.username) {
+            const userPara = document.createElement("p");
+            userPara.className = "post-user";
+            userPara.textContent = `Posted by: ${data.username}`;
+            detailsContainer.appendChild(userPara);
           }
           artBox.appendChild(detailsContainer);
     
