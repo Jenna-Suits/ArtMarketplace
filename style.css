@@ -75,6 +75,7 @@
 }
 
 .link-container {
+    display: flex;
     margin-top: 15px;
     flex-direction: column;
     align-items: flex-start;
